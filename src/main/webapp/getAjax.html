@@ -1,0 +1,67 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>注册</title>
+    <script type="text/javascript" src="js/jquery-3.5.1.js"></script>
+    <script type="text/javascript">
+        function validate() {
+            var name =$("#ne").val();
+            if (name == null || name == "") {
+
+                $("#nameDiv").html("用户名不能为空");
+
+            } else {
+                //ajax实现
+                //1.获取XMLHttpRequest对象
+                var req=createXMLHttpRequest();
+                //2.准备url 数据回调函数
+                var url="userServlet?name="+name;
+                req.open("GET",url);
+                req.onreadystatechange=callback;//3.数据回调函数
+                //4。发送请求
+                req.send(null);
+                //回调函数
+                function callback(){
+                    if(req.readyState==4||req.status==200){
+                        var data=req.responseText;
+                        alert(data);
+                        if (data == "true"){
+
+                            $("#nameDiv").html("用户名已经存在");
+                        }else {
+
+                            $("#nameDiv").html("用户名可以使用");
+                        }
+                    }
+                }
+
+            }
+        }
+
+        function createXMLHttpRequest(){
+            //1.如果当前浏览器为ie6以上浏览器
+            if (window.XMLHttpRequest){
+                return new XMLHttpRequest();
+            }else {
+                //2.如果当前浏览器为ie6以下浏览器
+                return new ActiveXObject("Microsoft.XMLHTTP");
+            }
+        }
+
+    </script>
+</head>
+<body>
+<form action="" id="form1">
+    <table>
+        <tr>
+            <td>用 户 名：</td>
+            <td><input type="text" name="name" id="ne" onblur="validate();"/>&nbsp;<font color="#c00fff">*</font></td>
+            <td>
+                <div id="nameDiv" style="display: inline"></div>
+            </td>
+        </tr>
+    </table>
+</form>
+</body>
+</html>
